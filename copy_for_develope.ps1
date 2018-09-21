@@ -61,12 +61,12 @@ if ($loop -eq 0)
 	 Write-Host "Вы выбрали " $baseName
 	 $path="\\Srv-mssql01\f\Backup"
 	 $filter="*"+$baseName+"*.bak"
-	 $file=Get-ChildItem -Path $path -Recurse -File -Include $filter | Sort-Object CreationTime -Descending |Select-Object -First 1
+	 $file=Get-ChildItem -Path $path -Recurse -File -Include $filter | Sort-Object CreationTime -Descending |Select-Object -First 1 
 	 Write-Host "Копирую файл..."
-     Copy-Item $file "D:\Temp"
+     Copy-Item $file.FullName "D:\Temp"
      Write-Host "Копирование завершено."
      Write-Host "Формирую скрипт SQL для восстановления бэкапа"
-     $null= Generate_SQL_Script -source $baseName -backup_file $file
+     $null= Generate_SQL_Script -source $baseName -backup_file $file.Name
      Pause      
  }
 
