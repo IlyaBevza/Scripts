@@ -1,4 +1,41 @@
-﻿Write-Host Выберите номер базы, которую надо восстановить:
+﻿
+function Generate_SQL_Script {
+  param ($source,$backup_file)
+   $template=New-Object System.Text.StringBuilder
+   $template.Append("USE [master]
+   RESTORE DATABASE [ЦелеваяБаза] 
+   FROM  DISK = N'@ПутьКБазе'
+    WITH  FILE = 1,  
+    MOVE N'ИсходнаяБаза' TO N'D:\Bases\ЦелеваяБаза.mdf', 
+    MOVE N'ИсходнаяБаза_log' TO N'D:\Logs\ЦелеваяБаза_log.ldf', 
+    NOUNLOAD,  REPLACE,  STATS = 5
+   GO")
+   $destinationBase= DestinationBase -source $source
+   if ($null -eq $destinationBase) 
+       {
+           Write-Host "Не удалось определить базу восстановления"
+           Pause
+           exit
+       }
+   $template.Replace("ЦелеваяБаза", $destinationBase)
+   $template.Replace("ИсходнаяБаза", $source)
+   $template.Replace("ПутьКБазе", $backup_file)
+   $sql_script= $env:USERPROFILE + "\Desktop\Restore_backup.sql"
+   Write-Host $sql_script
+   $template.ToString() > $sql_script
+   Start-Process $sql_script	
+}
+function DestinationBase ($source){
+    switch ($source)
+    {
+        buh_promservis{ return "test_buh"}
+        hrm_promservis {return "zup_test"}
+        bp_promservis {return "vz_bevza"}
+        default {return $null}
+    }
+ }
+
+Write-Host Выберите номер базы, которую надо восстановить:
 Write-Host 1. Бухгалтерия пердприятия
 Write-Host 2. ЗУП
 Write-Host 3. Взаимодействие
@@ -25,16 +62,16 @@ if ($loop -eq 0)
 	 $path="\\Srv-mssql01\f\Backup"
 	 $filter="*"+$baseName+"*.bak"
 	 $file=Get-ChildItem -Path $path -Recurse -File -Include $filter | Sort-Object CreationTime -Descending |Select-Object -First 1
-	 try{
-		Copy-Item $file "D:\Temp"
-		Write-Host Копирование завершено
-		Pause
-	 }
-	 catch{
-		 Write-Warning Не удалось скопировать файл
-		 Pause
-	 }
-	 
-	 
-
+	 Write-Host "Копирую файл..."
+     Copy-Item $file "D:\Temp"
+     Write-Host "Копирование завершено."
+     Write-Host "Формирую скрипт SQL для восстановления бэкапа"
+     $null= Generate_SQL_Script -source $baseName -backup_file $file
+     Pause      
  }
+
+
+
+
+ 
+
