@@ -4,7 +4,7 @@ function Generate_SQL_Script {
    $template=New-Object System.Text.StringBuilder
    $template.Append("USE [master]
    RESTORE DATABASE [ЦелеваяБаза] 
-   FROM  DISK = N'@ПутьКБазе'
+   FROM  DISK = N'ПутьКБазе'
     WITH  FILE = 1,  
     MOVE N'ИсходнаяБаза' TO N'D:\Bases\ЦелеваяБаза.mdf', 
     MOVE N'ИсходнаяБаза_log' TO N'D:\Logs\ЦелеваяБаза_log.ldf', 
