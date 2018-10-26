@@ -1,3 +1,5 @@
+#Скрипт работает только в 32 разрядном приложении
+
 function termintate_sessions ($base_name,$cluster_of_server,$cur_connections)
 {
     $sessions1CtoTerminate = ($cur_connections.GetSessions($cluster_of_server) | 
@@ -82,20 +84,17 @@ $connector= New-Object -ComObject V83.COMConnector
 Write-Host "Выберите сервер 1С"
 Write-Host "1. Боевой"
 Write-Host "2. Srv-ps1c-02"
-Write-Host "3. Srv-1c-dev"
-Write-Host "4. Произвольное имя сервера"
-Write-Host "5. Выход их скрипта"
+Write-Host "3. Произвольное имя сервера"
+Write-Host "4. Выход их скрипта"
 
 $workserver="srv-mssql"
 $dev1_server="srv-ps1c-02"
-$dev2_server="srv-1c-dev"
 $choice = Read-Host "Ваш выбор: "
 $server1C=$choice
 switch ($choice) {
     1 {$server1C= $workserver}
     2 {$server1C=$dev1_server}
-    3 {$server1C= $dev2_server}
-    4 {$server1C=$choice}
+    3 {$server1C=$choice}
     Default {exit}
 }
 
@@ -121,31 +120,10 @@ if ($server1C -eq $workserver){
 }
 if ($server1C -eq $dev1_server){
     switch ($choice) {
-        1 {
-             Write-Host "На данном сервере базы бухгалтерии нет. Сервер изменен на " $dev2_server
-             $server1C = $dev2_server
-             $base="test_buh"
-            }
+         1 { $base="test_buh" }
          2 {$base="zup_test"}  
          3 {$base ="vz_bevza"} 
          Default {$base=$choice}
-    }
-}
-
-if ($server1C -eq $dev2_server){
-    switch ($choice) {
-        1 {$base="test_buh"} 
-        2 {
-            Write-Host "На данном сервере нет базы ЗУП. Сервер изменен на " $dev1_server
-            $server1C = $dev1_server
-            $base="zup_test"
-        }       
-        3 {
-            Write-Host "На данном сервере нет базы Взаимодействие Сервер изменен на " $dev1_server
-            $server1C = $dev1_server
-            $base ="vz_bevza"
-        }   
-        Default {$base=$choice}
     }
 }
 
