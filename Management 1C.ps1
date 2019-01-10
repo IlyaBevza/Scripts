@@ -1,4 +1,4 @@
-#Скрипт работает только в 32 разрядном приложении
+#  PS необходимо запускать той же разрядности, какая и 1С на сервере.
 
 function termintate_sessions ($base_name,$cluster_of_server,$cur_connections)
 {
