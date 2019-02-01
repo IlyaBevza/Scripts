@@ -1,4 +1,4 @@
-#type - ограничения местонахождения баз. A - без ограничений, S - на сервере, F - файловые базы
+#type - РѕРіСЂР°РЅРёС‡РµРЅРёСЏ РјРµСЃС‚РѕРЅР°С…РѕР¶РґРµРЅРёСЏ Р±Р°Р·. A - Р±РµР· РѕРіСЂР°РЅРёС‡РµРЅРёР№, S - РЅР° СЃРµСЂРІРµСЂРµ, F - С„Р°Р№Р»РѕРІС‹Рµ Р±Р°Р·С‹
 function Get_Bases_1C ($type, $servername='File=')
 {
     $type=$type.ToUpper()
@@ -6,7 +6,7 @@ function Get_Bases_1C ($type, $servername='File=')
     $bases= @()
      if ((Test-Path -Path $path) -ne "True")
      {
-         Write-Host "файл ibases.v8i не найден"
+         Write-Host "Р¤Р°Р№Р»  ibases.v8i РЅРµ РЅР°Р№РґРµРЅ"
          return $bases
      } 
 
@@ -20,7 +20,7 @@ function Get_Bases_1C ($type, $servername='File=')
 
      foreach ($line in  (Get-Content -Path $path))
      {
-         if(($line -match $servername) -ne  'True'){
+         if(($line -match $servername) -eq $false){
             continue
          }
         foreach ($arr_elem in $types){
@@ -37,7 +37,7 @@ function Get_Bases_1C ($type, $servername='File=')
      }
     return $bases
 }
-# Проверяет, зарегистрирована ли база на определенном сервере
+# РџСЂРѕРІРµСЂСЏРµС‚, Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅР° Р»Рё Р±Р°Р·Р° РЅР° РѕРїСЂРµРґРµР»РµРЅРЅРѕРј СЃРµСЂРІРµСЂРµ
 function  BaseExistsOnServer {
     param (
         $server_name, $base_name
@@ -45,7 +45,7 @@ function  BaseExistsOnServer {
     $path= $env:APPDATA +"\1C\1CEStart\ibases.v8i"
     if ((Test-Path -Path $path) -ne "True")
     {
-         Write-Host "Файл ibases.v8i не найден"
+         Write-Host "Р¤Р°Р№Р»  ibases.v8i РЅРµ РЅР°Р№РґРµРЅ"
          return "False"
      } 
     
