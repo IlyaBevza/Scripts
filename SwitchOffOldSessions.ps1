@@ -35,6 +35,7 @@ Write-Host "1. Да, по всем базам"
 Write-Host "2. Нет, будет указана мною."
 Write-Host "3. Выйти из программы"
 $answer= Read-Host "Ваш выбор: "
+$restart_service= $false
 if ($answer -ne 1 -and $answer -ne 2)
 {
     return 
@@ -45,6 +46,7 @@ if ($answer -eq 2)
     $bases=$string_of_bases.Split(' ')
 }else{
     $bases= Get_Bases_1C 's' $server1C
+	$restart_service= $true
 }
 
 $connection=New-Object -ComObject V83.COMConnector
@@ -61,10 +63,24 @@ foreach ($session in $sessions)
     }
     if($session.StartedAt -le $limit)
     {
-        $AgentConnection($Cluster,$session)
         Write-Host "Завершен сеанс" $session.InfoBase.Name $session.UserName  $session.StartedAt
+        $AgentConnection.TerminateSession($Cluster,$session)
     }
 }
+if($restart_service -eq $true)
+{
+	Stop-Service *1c*
+	Wait-Event -Timeout 10
+	Start-Service *1c*
+	Get-Service *1c* | ForEach-Object{
+		$status= "Не запущена"
+		if ($_.Status -eq "Running"){
+			$status="Запущена"
+		}
+		Write-Host "Служба " $_.Name ":  " $status
+	}
+}
+Read-Host
 
 
 
