@@ -17,7 +17,7 @@ function isInBase([string[]]$baseArray, $baseName){
 }
 
 $hour =3
-Write-Host "—еанс будет считатьс€ устаревшим, если дата его начала ранее текущеего времени минус "$hour+" часа."
+Write-Host "—еанс будет считатьс€ устаревшим, если дата его начала ранее текущего времени на "$hour" часа."
 Write-Host "”кажите сервер"
 $servers="srv-mssql","srv-ps1c-02"
 Write-Host "1. " $servers[0]
