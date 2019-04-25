@@ -24,7 +24,11 @@ Write-Host "Любой другой символ - Выйти из скрипта"
 
 $choice=Read-Host "Ваш выбор: "
 switch ($choice) {
-    1 { Restart-Service $service }
+    1 { 
+		Stop-Service $service
+		Wait-Event -Timeout 10
+		Start-Service $service
+	   }
     2 {
         if ($service.Status -ne "Stopped"){
             Stop-Service $service

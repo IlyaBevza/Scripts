@@ -21,7 +21,7 @@ function Generate_SQL_Script {
 
 
 
-Write-Host  "Выберите номер базы, которую надо восстановить:"
+Write-Host  "Выберите номер базы, которй нужно сделать резервную копию"
 Write-Host 1. Бухгалтерия пердприятия
 Write-Host 2. ЗУП
 Write-Host 3. Взаимодействие
@@ -44,7 +44,6 @@ while($loop -eq 1){
 }
 if ($loop -eq 0)
  {
-	 Write-Host "Формирую скрипт SQL для восстановления бэкапа "+ $baseName
-     $null= Generate_SQL_Script -source $baseName
-     Pause      
+	 Write-Host "Формирую скрипт SQL для созддания бэкапа "+ $baseName
+     $null= Generate_SQL_Script -source $baseName     
  }
